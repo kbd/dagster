@@ -1,4 +1,6 @@
 from dagster import repository
+from dagster.core.asset_defs.gather_assets import gather_assets_in_package
+from hacker_news_assets import assets
 
 from .pipelines.dbt_pipeline import activity_stats
 from .pipelines.download_pipeline import download_comments_and_stories_prod
@@ -10,6 +12,8 @@ from .sensors.slack_on_pipeline_failure_sensor import make_pipeline_failure_sens
 
 @repository
 def hacker_news_repository():
+    all_assets = gather_assets_in_package(assets)
+
     pipelines = [
         activity_stats,
         download_comments_and_stories_prod,
