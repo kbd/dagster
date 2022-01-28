@@ -333,11 +333,11 @@ def config_with_map():
             ),
         }
     )
-    def a_solid_with_three_field_config(_context):
+    def a_solid_with_map_config(_context):
         return None
 
     noop_solid()
-    a_solid_with_three_field_config()
+    a_solid_with_map_config()
 
 
 @pipeline
