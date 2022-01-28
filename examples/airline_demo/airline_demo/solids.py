@@ -238,7 +238,7 @@ def load_data_to_database_from_spark(context, data_frame):
     context.resources.db_info.load_table(data_frame, context.solid_config["table_name"])
 
     table_name = context.solid_config["table_name"]
-    yield AssetMaterialization(
+    materialization = AssetMaterialization(
         asset_key="table:{table_name}".format(table_name=table_name),
         description=(
             "Persisted table {table_name} in database configured in the db_info resource."
@@ -248,7 +248,8 @@ def load_data_to_database_from_spark(context, data_frame):
             EventMetadataEntry.text(label="Db", text=context.resources.db_info.db_name),
         ],
     )
-    yield Output(value=table_name, output_name="table_name")
+    context.log_event(materialization)
+    return table_name
 
 
 # end_solids_marker_0
@@ -569,21 +570,24 @@ def join_q2_data(
             if required_column not in df.columns:
                 missing_things.append({"month": month, "missing_column": required_column})
 
-    yield ExpectationResult(
-        success=not bool(missing_things),
-        label="airport_ids_present",
-        description="Sequence IDs present in incoming monthly flight data.",
-        metadata_entries=[
-            EventMetadataEntry.json(label="metadata", data={"missing_columns": missing_things})
-        ],
+    context.log_event(
+        ExpectationResult(
+            success=not bool(missing_things),
+            label="airport_ids_present",
+            description="Sequence IDs present in incoming monthly flight data.",
+            metadata_entries=[
+                EventMetadataEntry.json(label="metadata", data={"missing_columns": missing_things})
+            ],
+        )
     )
-
-    yield ExpectationResult(
-        success=set(april_data.columns) == set(may_data.columns) == set(june_data.columns),
-        label="flight_data_same_shape",
-        metadata_entries=[
-            EventMetadataEntry.json(label="metadata", data={"columns": april_data.columns})
-        ],
+    context.log_event(
+        ExpectationResult(
+            success=set(april_data.columns) == set(may_data.columns) == set(june_data.columns),
+            label="flight_data_same_shape",
+            metadata_entries=[
+                EventMetadataEntry.json(label="metadata", data={"columns": april_data.columns})
+            ],
+        )
     )
 
     q2_data = april_data.union(may_data).union(june_data)
@@ -610,4 +614,4 @@ def join_q2_data(
         """
     )
 
-    yield Output(rename_spark_dataframe_columns(full_data, lambda c: c.lower()))
+    return rename_spark_dataframe_columns(full_data, lambda c: c.lower())

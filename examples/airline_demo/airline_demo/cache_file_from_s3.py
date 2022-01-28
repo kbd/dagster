@@ -56,11 +56,13 @@ def cache_file_from_s3(context, s3_coordinate: S3Coordinate) -> FileHandle:
     else:
         context.log.info("File {} already present in cache".format(target_file_handle.path_desc))
 
-    yield ExpectationResult(
-        success=file_cache.has_file_object(target_key),
-        label="file_handle_exists",
-        metadata_entries=[
-            EventMetadataEntry.path(path=target_file_handle.path_desc, label=target_key)
-        ],
+    context.log_event(
+        ExpectationResult(
+            success=file_cache.has_file_object(target_key),
+            label="file_handle_exists",
+            metadata_entries=[
+                EventMetadataEntry.path(path=target_file_handle.path_desc, label=target_key)
+            ],
+        )
     )
-    yield Output(target_file_handle)
+    return target_file_handle

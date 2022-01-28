@@ -20,10 +20,12 @@ def generate_plot(trips):
     ax.set(title="Trip lengths", xlabel="Minutes", ylabel="Count")
     ax.hist(minute_lengths, bins=bin_edges)
     fig.savefig("trip_lengths.png")
-    yield AssetMaterialization(
-        asset_key="trip_dist_plot", description="Distribution of trip lengths."
+    context.log_event(
+        AssetMaterialization(
+            asset_key="trip_dist_plot", description="Distribution of trip lengths."
+        )
     )
-    yield Output(None)
+    return None
 
 
 @job

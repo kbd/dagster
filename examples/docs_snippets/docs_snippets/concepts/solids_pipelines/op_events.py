@@ -94,17 +94,20 @@ def my_metadata_output(context):
 @op
 def my_metadata_expectation_op(context, df):
     df = do_some_transform(df)
-    yield ExpectationResult(
-        success=len(df) > 0,
-        description="ensure dataframe has rows",
-        metadata={
-            "text_metadata": "Text-based metadata for this event",
-            "dashboard_url": EventMetadata.url("http://mycoolsite.com/url_for_my_data"),
-            "raw_count": len(df),
-            "size (bytes)": calculate_bytes(df),
-        },
+    context.log_event(
+        ExpectationResult(
+            success=len(df) > 0,
+            description="ensure dataframe has rows",
+            metadata={
+                "text_metadata": "Text-based metadata for this event",
+                "dashboard_url": EventMetadata.url("http://mycoolsite.com/url_for_my_data"),
+                "raw_count": len(df),
+                "size (bytes)": calculate_bytes(df),
+            },
+        )
     )
-    yield Output(df)
+
+    return df
 
 
 # end_metadata_expectation_op
@@ -170,13 +173,15 @@ def my_retry_op():
 def my_asset_op(context):
     df = get_some_data()
     store_to_s3(df)
-    yield AssetMaterialization(
-        asset_key="s3.my_asset",
-        description="A df I stored in s3",
+    context.log_event(
+        AssetMaterialization(
+            asset_key="s3.my_asset",
+            description="A df I stored in s3",
+        )
     )
 
     result = do_some_transform(df)
-    yield Output(result)
+    return result
 
 
 # end_asset_op

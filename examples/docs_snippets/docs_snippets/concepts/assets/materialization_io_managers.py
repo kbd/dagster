@@ -19,8 +19,10 @@ class PandasCsvIOManager(IOManager):
 
         obj.to_csv(file_path)
 
-        yield AssetMaterialization(
-            asset_key=AssetKey(file_path), description="Persisted result to storage."
+        context.log_event(
+            AssetMaterialization(
+                asset_key=AssetKey(file_path), description="Persisted result to storage."
+            )
         )
 
 
@@ -38,13 +40,15 @@ class PandasCsvIOManagerWithAsset(IOManager):
 
         obj.to_csv(file_path)
 
-        yield AssetMaterialization(
-            asset_key=AssetKey(file_path),
-            description="Persisted result to storage.",
-            metadata={
-                "number of rows": obj.shape[0],
-                "some_column mean": obj["some_column"].mean(),
-            },
+        context.log_event(
+            AssetMaterialization(
+                asset_key=AssetKey(file_path),
+                description="Persisted result to storage.",
+                metadata={
+                    "number of rows": obj.shape[0],
+                    "some_column mean": obj["some_column"].mean(),
+                },
+            )
         )
 
 
