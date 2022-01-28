@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
-from typing import Any, Mapping, Dict, Iterator, List, Optional
+from typing import Any, Dict, Iterator, List, Mapping, Optional
 
 from dagster import check
 from dagster.core.definitions.dependency import Node, NodeHandle
