@@ -56,6 +56,12 @@ query PipelineQuery(
                         ... on EvaluationStackListItemEntry {
                             listIndex
                         }
+                        ... on EvaluationStackMapKeyEntry {
+                            mapKey
+                        }
+                        ... on EvaluationStackMapValueEntry {
+                            mapKey
+                        }
                     }
                 }
             }
