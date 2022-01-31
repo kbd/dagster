@@ -7,6 +7,9 @@ metadata:
     {{- include "dagster.labels" $ | nindent 4 }}
     component: dagster-daemon
     deployment: daemon
+    {{- with .Values.dagsterDaemon.labels }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
   annotations:
     {{- range $key, $value := .Values.dagsterDaemon.annotations }}
     {{ $key }}: {{ $value | squote }}
@@ -24,6 +27,9 @@ spec:
         {{- include "dagster.selectorLabels" $ | nindent 8 }}
         component: dagster-daemon
         deployment: daemon
+        {{- with .Values.dagsterDaemon.podLabels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/dagster-instance: {{ include (print $.Template.BasePath "/configmap-instance.yaml") . | sha256sum }}
         {{- range $key, $value := .Values.dagsterDaemon.annotations }}

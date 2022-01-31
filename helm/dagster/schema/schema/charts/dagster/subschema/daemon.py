@@ -68,6 +68,8 @@ class Daemon(BaseModel):
     env: Dict[str, str]
     envConfigMaps: List[kubernetes.ConfigMapEnvSource]
     envSecrets: List[kubernetes.SecretEnvSource]
+    labels: Dict[str, str]
+    podLabels: Dict[str, str]
     nodeSelector: kubernetes.NodeSelector
     affinity: kubernetes.Affinity
     tolerations: kubernetes.Tolerations
