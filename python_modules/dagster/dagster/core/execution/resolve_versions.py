@@ -91,7 +91,7 @@ def resolve_step_versions(pipeline_def, execution_plan, resolved_run_config):
         for input_name, version in input_version_dict.items():
             if version is None:
                 raise DagsterInvariantViolationError(
-                    f"Received None version for input {input_name} to solid {solid_def.name}."
+                    f"Received None version for input {input_name} to op {solid_def.name}."
                 )
         input_versions = [version for version in input_version_dict.values()]
 
@@ -111,7 +111,7 @@ def resolve_step_versions(pipeline_def, execution_plan, resolved_run_config):
             raise DagsterInvariantViolationError(
                 f"While using memoization, version for {node_label} was None. Please "
                 "either provide a versioning strategy for your job, or provide a version using the "
-                "solid decorator."
+                f"{solid_def.node_type_str} decorator."
             )
 
         check_valid_version(solid_def_version)
