@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from snapshottest import Snapshot
 
+
 snapshots = Snapshot()
 
 snapshots['test_query_all_solids 1'] = {
@@ -21,6 +22,22 @@ snapshots['test_query_all_solids 1'] = {
                         },
                         'solidHandle': {
                             'handleID': 'a_solid_with_config'
+                        }
+                    }
+                ]
+            },
+            {
+                '__typename': 'UsedSolid',
+                'definition': {
+                    'name': 'a_solid_with_map_config'
+                },
+                'invocations': [
+                    {
+                        'pipeline': {
+                            'name': 'config_with_map'
+                        },
+                        'solidHandle': {
+                            'handleID': 'a_solid_with_map_config'
                         }
                     }
                 ]
@@ -802,6 +819,14 @@ snapshots['test_query_all_solids 1'] = {
                     {
                         'pipeline': {
                             'name': 'asset_lineage_pipeline'
+                        },
+                        'solidHandle': {
+                            'handleID': 'noop_solid'
+                        }
+                    },
+                    {
+                        'pipeline': {
+                            'name': 'config_with_map'
                         },
                         'solidHandle': {
                             'handleID': 'noop_solid'
