@@ -23,8 +23,6 @@ IS_WINDOWS = os.name == "nt"
 
 funcsigs = inspect
 
-multiprocessing = multiprocessing.get_context("spawn")  # type: ignore[assignment]
-
 IS_WINDOWS = os.name == "nt"
 
 # TODO implement a generic import by name -- see https://stackoverflow.com/questions/301134/how-to-import-a-module-given-its-name
