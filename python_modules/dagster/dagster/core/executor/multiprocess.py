@@ -92,8 +92,13 @@ class MultiprocessExecutor(Executor):
         self._retries = check.inst_param(retries, "retries", RetryMode)
         max_concurrent = max_concurrent if max_concurrent else multiprocessing.cpu_count()
         self._max_concurrent = check.int_param(max_concurrent, "max_concurrent")
-        start_method = check.str_param(start_method, "start_method")
+        start_method = check.opt_str_param(start_method, "start_method")
         valid_starts = multiprocessing.get_all_start_methods()
+
+        if start_method is None:
+            # default based on whats available
+            start_method = "forkserver" if "forkserver" in valid_starts else "spawn"
+
         if start_method not in valid_starts:
             raise DagsterUnmetExecutorRequirementsError(
                 f"The selected start_method '{start_method}' is not available. "

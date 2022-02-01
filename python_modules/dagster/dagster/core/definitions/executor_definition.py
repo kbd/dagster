@@ -261,7 +261,7 @@ def _core_multiprocess_executor_creation(config: Dict[str, Any]):
     return MultiprocessExecutor(
         max_concurrent=config["max_concurrent"],
         retries=RetryMode.from_config(config["retries"]),
-        start_method=config["start_method"],
+        start_method=config.get("start_method"),
     )
 
 
@@ -287,7 +287,6 @@ MULTI_PROC_CONFIG = {
             ],
         ),
         is_required=False,
-        default_value="spawn",
     ),
     "retries": get_retries_config(),
 }
